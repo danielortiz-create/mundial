@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundial 2026 — Estadísticas y probabilidades de hoy</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="viz-root">
+  <div class="contenedor">
+    <header class="encabezado">
+      <h1>⚽ Mundial 2026 — Partidos de hoy</h1>
+      <p class="sub" id="fecha"></p>
+      <p class="meta" id="actualizado"></p>
+    </header>
+
+    <main id="partidos"></main>
+
+    <footer class="pie">
+      <p><strong>Metodología.</strong> <em>Mercado</em>: cuotas americanas 3-way (90 min) convertidas a
+        probabilidades implícitas y normalizadas para eliminar el margen del bookmaker.
+        <em>Modelo Elo</em>: expectativa Elo (sedes neutrales, sin ventaja de local) repartida en goles
+        esperados (base 2.6 de eliminatoria, ajustada por el perfil goleador de ambos equipos en la
+        fase de grupos) y resuelta con una matriz de Poisson.
+        <em>Consenso</em>: promedio de ambas, nuestra estimación más realista.</p>
+      <p><strong>Fuentes (2 jul 2026).</strong> Cuotas: FanDuel y bet365 (vía ESPN, RotoWire, Covers,
+        oddschecker). Resultados y calendario: FIFA, Yahoo Sports, CBS Sports. Elo: eloratings.net
+        (España confirmado; el resto marcado como ≈ estimado a partir de los ratings pre-torneo y los
+        resultados de grupos). Rankings FIFA aproximados.</p>
+      <p><strong>Aviso.</strong> Este panel es informativo y educativo; no es consejo de apuestas.
+        Las probabilidades son estimaciones y las cuotas cambian durante el día. Juega responsablemente.</p>
+    </footer>
+  </div>
+
+  <div id="tooltip" role="tooltip"></div>
+
+  <script src="js/model.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

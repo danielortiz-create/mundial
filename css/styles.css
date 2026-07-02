@@ -1,0 +1,130 @@
+/* Tokens de color — paleta validada (ver README). El cuerpo del CSS usa
+   roles, no hex: el modo oscuro solo redefine las variables. */
+.viz-root {
+  --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --hairline: #e1e0d9;
+  --border: rgba(11, 11, 11, 0.10);
+  --team-a: #2a78d6;   /* polo divergente frío */
+  --team-b: #e34948;   /* polo divergente cálido */
+  --draw: #d4d3cc;     /* punto medio neutro: el empate no es de nadie */
+  --on-team-a: #ffffff;
+  --on-team-b: #ffffff;
+  --on-draw: #0b0b0b;
+}
+@media (prefers-color-scheme: dark) {
+  .viz-root {
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.10);
+    --team-a: #3987e5;
+    --team-b: #e66767;
+    --draw: #4a4a47;
+    --on-team-a: #ffffff;
+    --on-team-b: #0b0b0b;
+    --on-draw: #ffffff;
+  }
+}
+
+* { box-sizing: border-box; }
+body.viz-root {
+  margin: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+
+.contenedor { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+
+header.encabezado { margin-bottom: 20px; }
+.encabezado h1 { font-size: 26px; margin: 0 0 4px; }
+.encabezado .sub { color: var(--text-secondary); margin: 0; font-size: 15px; }
+.encabezado .meta { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+.tarjeta {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.tarjeta__cabecera {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px;
+  margin-bottom: 4px;
+}
+.tarjeta__titulo { font-size: 20px; font-weight: 600; margin: 0; }
+.tarjeta__meta { color: var(--text-muted); font-size: 13px; }
+.tarjeta__contexto { color: var(--text-secondary); font-size: 14px; margin: 6px 0 16px; }
+
+/* ---- Tabla comparativa de estadísticas (también es la vista de tabla) ---- */
+table.stats { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 18px; }
+table.stats th, table.stats td { padding: 5px 8px; text-align: center; }
+table.stats td:first-child {
+  text-align: left; color: var(--text-secondary); font-weight: 400; width: 44%;
+}
+table.stats thead th { font-weight: 600; border-bottom: 1px solid var(--hairline); }
+table.stats tbody tr + tr td { border-top: 1px solid var(--hairline); }
+table.stats td.num { font-variant-numeric: tabular-nums; }
+.nb { white-space: nowrap; }
+.swatch {
+  display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+  margin-right: 6px; vertical-align: baseline;
+}
+
+/* ---- Barras de probabilidad 1X2 ---- */
+.prob-bloque { margin-bottom: 14px; }
+.prob-titulo { font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+.leyenda { display: flex; gap: 16px; font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+.leyenda span { display: inline-flex; align-items: center; }
+
+.prob-fila { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 10px; margin-bottom: 8px; }
+.prob-fila__nombre { font-size: 13px; color: var(--text-secondary); text-align: right; }
+.prob-fila__nombre .detalle { display: block; font-size: 11px; color: var(--text-muted); }
+.prob-fila--consenso .prob-fila__nombre { color: var(--text-primary); font-weight: 600; }
+
+.barra { display: flex; gap: 2px; /* separador de superficie entre segmentos */ }
+.segmento {
+  height: 20px; /* marca delgada, <= 24px */
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  min-width: 0; overflow: visible; white-space: nowrap;
+  cursor: default;
+}
+.segmento--a { background: var(--team-a); color: var(--on-team-a); border-radius: 4px 0 0 4px; }
+.segmento--x { background: var(--draw);   color: var(--on-draw); }
+.segmento--b { background: var(--team-b); color: var(--on-team-b); border-radius: 0 4px 4px 0; }
+.prob-fila--consenso .segmento { height: 24px; font-size: 13px; }
+
+/* ---- Chips de extras (cuotas, over/under, ambos anotan) ---- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip {
+  font-size: 12.5px; color: var(--text-secondary);
+  border: 1px solid var(--hairline); border-radius: 999px;
+  padding: 3px 10px; font-variant-numeric: tabular-nums;
+}
+.chip b { color: var(--text-primary); font-weight: 600; }
+
+/* ---- Tooltip compartido ---- */
+#tooltip {
+  position: fixed; z-index: 10; pointer-events: none;
+  background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  padding: 8px 10px; font-size: 13px; max-width: 260px;
+  display: none;
+}
+#tooltip .t-titulo { font-weight: 600; margin-bottom: 2px; }
+#tooltip .t-detalle { color: var(--text-secondary); font-size: 12px; }
+
+footer.pie { color: var(--text-muted); font-size: 12.5px; margin-top: 28px; }
+footer.pie p { margin: 6px 0; }
+footer.pie a { color: var(--text-secondary); }
