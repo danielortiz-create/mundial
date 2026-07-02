@@ -107,6 +107,42 @@
     return avg.map((p) => p / s);
   }
 
+  /**
+   * Valor esperado por unidad apostada: prob * (cuota - 1) - (1 - prob).
+   * Positivo => la cuota paga más de lo que la probabilidad justifica.
+   */
+  function expectedValue(prob, decimalOdd) {
+    return prob * (decimalOdd - 1) - (1 - prob);
+  }
+
+  /** Los n marcadores más probables según la matriz de Poisson. */
+  function topScorelines(lambdaA, lambdaB, n, maxGoals) {
+    const M = maxGoals || 6;
+    const out = [];
+    for (let a = 0; a <= M; a++) {
+      for (let b = 0; b <= M; b++) {
+        out.push({ marcador: a + '-' + b, p: poissonPmf(lambdaA, a) * poissonPmf(lambdaB, b) });
+      }
+    }
+    out.sort((x, y) => y.p - x.p);
+    return out.slice(0, n || 3);
+  }
+
+  /**
+   * Recomendación de apuesta según valor esperado (probs = consenso,
+   * decimalOdds = cuotas de la casa). Recomienda el resultado con mayor
+   * EV solo si supera el umbral (default 5%); si ninguno lo supera, no
+   * hay apuesta de valor y se devuelve el favorito como referencia.
+   */
+  function pickBet(probs, decimalOdds, threshold) {
+    const th = threshold === undefined ? 0.05 : threshold;
+    const evs = probs.map((p, i) => expectedValue(p, decimalOdds[i]));
+    let best = 0;
+    for (let i = 1; i < evs.length; i++) if (evs[i] > evs[best]) best = i;
+    const favorito = probs.indexOf(Math.max.apply(null, probs));
+    return { evs, index: best, ev: evs[best], hayValor: evs[best] >= th, favorito };
+  }
+
   const MundialModel = {
     americanToDecimal,
     impliedProbs,
@@ -117,6 +153,9 @@
     eloModel,
     expectedTotalGoals,
     consensus,
+    expectedValue,
+    topScorelines,
+    pickBet,
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = MundialModel;

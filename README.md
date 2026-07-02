@@ -15,6 +15,13 @@ favor/en contra, Elo y ranking FIFA, cuotas en formato americano y decimal,
 margen de la casa, y probabilidades de *más de 2.5 goles* y *ambos anotan*
 según el modelo.
 
+Cada tarjeta cierra con un bloque de **análisis y apuesta**: los marcadores
+más probables según la matriz de Poisson, el valor esperado por unidad
+apostada de cada resultado (usando el consenso como probabilidad real contra
+la cuota ofrecida) y una recomendación: 💡 la apuesta con mayor valor
+esperado si supera el +5%, o ⚖️ "sin apuesta de valor" cuando las cuotas ya
+reflejan las probabilidades.
+
 ## Cómo verlo
 
 Abre `index.html` en el navegador (doble clic — funciona offline, sin build

@@ -56,6 +56,30 @@ test('consensus promedia y normaliza', () => {
   close(c[0], 0.6, 1e-9);
 });
 
+test('expectedValue: cuota justa => EV 0, cuota generosa => EV positivo', () => {
+  close(M.expectedValue(0.5, 2.0), 0);
+  assert.ok(M.expectedValue(0.24, 5.0) > 0);   // 24% real a cuota de 20% implícito
+  assert.ok(M.expectedValue(0.7, 1.3125) < 0); // 70% real a cuota de 76% implícito
+});
+
+test('topScorelines ordena por probabilidad y respeta n', () => {
+  const top = M.topScorelines(2.25, 0.45, 3);
+  assert.equal(top.length, 3);
+  assert.ok(top[0].p >= top[1].p && top[1].p >= top[2].p);
+  assert.equal(top[0].marcador, '2-0'); // caso España-Austria
+});
+
+test('pickBet recomienda solo con valor por encima del umbral', () => {
+  // cuota generosa para el tercero => hay valor
+  const conValor = M.pickBet([0.49, 0.27, 0.24], [1.8, 3.4, 5.0]);
+  assert.ok(conValor.hayValor);
+  assert.equal(conValor.index, 2);
+  assert.equal(conValor.favorito, 0);
+  // cuotas justas => sin valor
+  const sinValor = M.pickBet([0.5, 0.3, 0.2], [2.0, 3.333, 5.0]);
+  assert.ok(!sinValor.hayValor);
+});
+
 test('los datos de partidos son coherentes', () => {
   assert.equal(DATA.partidos.length, 3);
   for (const p of DATA.partidos) {

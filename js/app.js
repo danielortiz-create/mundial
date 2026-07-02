@@ -16,12 +16,15 @@
     const totalGoles = M.expectedTotalGoals(golesPorPartido(partido.equipoA), golesPorPartido(partido.equipoB));
     const modelo = M.eloModel(partido.equipoA.elo, partido.equipoB.elo, totalGoles);
     const modeloArr = [modelo.win, modelo.draw, modelo.loss];
+    const consenso = M.consensus(mercado, modeloArr);
     return {
       mercado,
       modelo,
       modeloArr,
-      consenso: M.consensus(mercado, modeloArr),
+      consenso,
       margen: M.bookmakerMargin(cuotasDec),
+      marcadores: M.topScorelines(modelo.lambdaA, modelo.lambdaB, 3),
+      apuesta: M.pickBet(consenso, cuotasDec),
     };
   }
 
@@ -180,7 +183,57 @@
       chip(`Ambos anotan (modelo): <b>${pct1(r.modelo.btts)}</b>`)
     );
     card.append(chips);
+    card.append(seccionAnalisis(partido, r));
     return card;
+  }
+
+  /* ---- análisis estadístico y apuesta recomendada ---- */
+  function seccionAnalisis(partido, r) {
+    const A = partido.equipoA, B = partido.equipoB;
+    const nombres = [A.nombre, 'Empate', B.nombre];
+    const cuotas = [partido.cuotas.a, partido.cuotas.x, partido.cuotas.b];
+    const bloque = el('div', 'analisis');
+    bloque.append(el('h3', 'prob-titulo', 'Análisis y apuesta'));
+
+    const marcadores = r.marcadores
+      .map((s) => `${s.marcador} (${pct1(s.p)})`)
+      .join(' · ');
+    const lineaMarcadores = el('p', 'analisis__linea');
+    lineaMarcadores.append(el('span', 'analisis__etiqueta', 'Marcadores más probables: '));
+    lineaMarcadores.append(document.createTextNode(marcadores));
+
+    const evTxt = r.apuesta.evs
+      .map((ev, i) => `${nombres[i]} ${(ev >= 0 ? '+' : '')}${(ev * 100).toFixed(1)}%`)
+      .join(' · ');
+    const lineaEv = el('p', 'analisis__linea');
+    lineaEv.append(el('span', 'analisis__etiqueta', 'Valor esperado por unidad apostada: '));
+    lineaEv.append(document.createTextNode(evTxt));
+
+    const pick = el('div', 'pick' + (r.apuesta.hayValor ? ' pick--valor' : ''));
+    if (r.apuesta.hayValor) {
+      const i = r.apuesta.index;
+      pick.append(el('span', 'pick__icono', '💡'));
+      const texto = el('div');
+      texto.append(el('strong', null,
+        `Nuestra apuesta: ${nombres[i]} a ${usa(cuotas[i])} (${dec(cuotas[i])})`));
+      texto.append(el('div', 'pick__detalle',
+        `El consenso le da ${pct1(r.consenso[i])} y la cuota paga como si tuviera ` +
+        `${pct1(1 / M.americanToDecimal(cuotas[i]))}: valor esperado ` +
+        `${(r.apuesta.ev >= 0 ? '+' : '')}${(r.apuesta.ev * 100).toFixed(1)}% por unidad.`));
+      pick.append(texto);
+    } else {
+      const f = r.apuesta.favorito;
+      pick.append(el('span', 'pick__icono', '⚖️'));
+      const texto = el('div');
+      texto.append(el('strong', null, 'Sin apuesta de valor'));
+      texto.append(el('div', 'pick__detalle',
+        `Las cuotas ya reflejan las probabilidades: el resultado más probable es ` +
+        `${nombres[f]} (${pct1(r.consenso[f])}), pero a ${usa(cuotas[f])} pagas ` +
+        `lo justo. Mejor guardar la unidad para otro partido.`));
+      pick.append(texto);
+    }
+    bloque.append(lineaMarcadores, lineaEv, pick);
+    return bloque;
   }
 
   /* Un label dentro de un segmento solo si cabe con holgura; si no, lo

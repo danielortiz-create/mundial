@@ -113,6 +113,20 @@ table.stats td.num { font-variant-numeric: tabular-nums; }
 }
 .chip b { color: var(--text-primary); font-weight: 600; }
 
+/* ---- Análisis y apuesta recomendada ---- */
+.analisis { margin-top: 18px; border-top: 1px solid var(--hairline); padding-top: 14px; }
+.analisis__linea { margin: 4px 0; font-size: 13.5px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.analisis__etiqueta { color: var(--text-secondary); }
+.pick {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-top: 10px; padding: 10px 12px;
+  border: 1px solid var(--hairline); border-radius: 8px;
+  font-size: 14px;
+}
+.pick--valor { border-color: var(--team-a); }
+.pick__icono { font-size: 18px; line-height: 1.3; }
+.pick__detalle { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
+
 /* ---- Tooltip compartido ---- */
 #tooltip {
   position: fixed; z-index: 10; pointer-events: none;
