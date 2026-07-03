@@ -60,9 +60,9 @@ const DATA = {
       casa: 'FanDuel',
       equipoA: {
         nombre: 'Suiza', bandera: '🇨🇭', elo: 1942, eloEstimado: true, fifa: 17,
-        grupo: 'B', posicion: '1º', puntos: 7, ve_d: '2V 1E 0D', gf: 8, gc: 3,
-        resultados: ['1-1 Catar', '4-1 Bosnia', '3-1 Canadá'],
-        nota: 'Líder de grupo con 8 goles; invicta en sus últimos 5 partidos y con octavos en los últimos 3 mundiales.',
+        grupo: 'B', posicion: '1º', puntos: 7, ve_d: '2V 1E 0D', gf: 7, gc: 3,
+        resultados: ['1-1 Catar', '4-1 Bosnia', '2-1 Canadá'],
+        nota: 'Líder de grupo con 7 goles; invicta en sus últimos 5 partidos y con octavos en los últimos 3 mundiales.',
       },
       equipoB: {
         nombre: 'Argelia', bandera: '🇩🇿', elo: 1717, eloEstimado: true, fifa: 36,
