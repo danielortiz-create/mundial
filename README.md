@@ -55,6 +55,12 @@ ratings están marcados con `≈` porque son estimaciones (los sitios de Elo no
 eran accesibles al construir el panel) basadas en los ratings pre-torneo
 ajustados por los resultados de la fase de grupos.
 
+## Otros contenidos del repositorio
+
+- [`clases/`](clases/README.md) — curso de **fibra óptica y redes
+  Ethernet**: 16 clases con teoría, laboratorios y evaluación, más
+  anexos de herramientas, normativa, fórmulas y glosario.
+
 ## Aviso
 
 Panel informativo y educativo — **no es consejo de apuestas**. Las cuotas
